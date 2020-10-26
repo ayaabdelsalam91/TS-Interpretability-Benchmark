@@ -21,5 +21,59 @@ Saliency methods are used extensively to highlight the importance of input featu
 
 
 ## Usage:
-- The code for the benchmark is available under Scripts folder to run full benchmark run ```python run_benchmark.py```
-- MNIST experiments and TSR under MNIST Experiments
+- Create the following folder structure.
+```
+TS-Interpretability-Benchmark
+    │
+    ├── Scripts
+    │  ├── Plotting
+    |  │
+    │  └── Models
+    │ 
+    ├──Results
+    │  ├── Saliency_Values
+    |  │
+    │  ├── Saliency_Masks
+    |  │
+    │  ├── Saliency_Distribution
+    |  │
+    │  ├── Precision_Recall
+    |  │
+    │  ├── Masked_Accuracy
+    |  │
+    │  └── Accuracy_Metrics
+    │ 
+    ├──Models
+    │  ├── Transformer
+    |  │
+    │  ├── TCN
+    |  │
+    │  ├──LSTMWithInputCellAttention
+    |  │
+    │  └── LSTM
+    │ 
+    ├──Graphs
+    │  ├── Saliency_Maps
+    |  │
+    │  ├── Saliency_Distribution
+    |  │
+    │  ├── Precision_Recall
+    |  │
+    │  ├── Datasets
+    |  │
+    │  └── Accuracy_Drop
+    │
+    ├── Datasets
+    │
+    └── MNIST Experiments
+        ├── Scripts
+        │
+        ├──Models
+        │
+        ├─Graphs
+        │
+        └── Data
+
+```
+- The code for the benchmark is available under Scripts folder to run full benchmark run ```python run_benchmark.py```.
+- MNIST experiments and TSR under MNIST Experiments.
