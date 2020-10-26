@@ -48,7 +48,7 @@ TS-Interpretability-Benchmark
     |  │
     │  ├── TCN
     |  │
-    │  ├──LSTMWithInputCellAttention
+    │  ├── LSTMWithInputCellAttention
     |  │
     │  └── LSTM
     │ 
@@ -68,9 +68,9 @@ TS-Interpretability-Benchmark
     └── MNIST Experiments
         ├── Scripts
         │
-        ├──Models
+        ├── Models
         │
-        ├─Graphs
+        ├── Graphs
         │
         └── Data
 
