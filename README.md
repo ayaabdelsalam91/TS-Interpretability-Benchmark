@@ -21,5 +21,5 @@ Saliency methods are used extensively to highlight the importance of input featu
 
 
 ## Usage:
--The code for the benchmark is available under Scripts folder to run full benchmark run ```python run_benchmark.py```
--MNIST experiments and TSR under MNIST Experiments
+- The code for the benchmark is available under Scripts folder to run full benchmark run ```python run_benchmark.py```
+- MNIST experiments and TSR under MNIST Experiments
