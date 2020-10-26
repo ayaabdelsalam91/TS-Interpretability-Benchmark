@@ -57,7 +57,6 @@ TS-Interpretability-Benchmark
         ├── Models
         ├── Graphs
         └── Data
-
 ```
 - The code for the benchmark is available under Scripts folder to run full benchmark run ```python run_benchmark.py```.
 - MNIST experiments and TSR under MNIST Experiments.
