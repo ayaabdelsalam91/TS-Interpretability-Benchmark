@@ -27,51 +27,35 @@ TS-Interpretability-Benchmark
     │
     ├── Scripts
     │  ├── Plotting
-    |  │
     │  └── Models
     │ 
     ├──Results
     │  ├── Saliency_Values
-    |  │
     │  ├── Saliency_Masks
-    |  │
     │  ├── Saliency_Distribution
-    |  │
     │  ├── Precision_Recall
-    |  │
     │  ├── Masked_Accuracy
-    |  │
     │  └── Accuracy_Metrics
     │ 
     ├──Models
     │  ├── Transformer
-    |  │
     │  ├── TCN
-    |  │
     │  ├── LSTMWithInputCellAttention
-    |  │
     │  └── LSTM
     │ 
     ├──Graphs
     │  ├── Saliency_Maps
-    |  │
     │  ├── Saliency_Distribution
-    |  │
     │  ├── Precision_Recall
-    |  │
     │  ├── Datasets
-    |  │
     │  └── Accuracy_Drop
     │
     ├── Datasets
     │
     └── MNIST Experiments
         ├── Scripts
-        │
         ├── Models
-        │
         ├── Graphs
-        │
         └── Data
 
 ```
