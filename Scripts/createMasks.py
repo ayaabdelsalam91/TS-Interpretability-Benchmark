@@ -2,11 +2,7 @@ import sys
 import argparse
 import Helper
 import numpy as np
-import time
-
 import random
-
-
 import os
 
 
@@ -14,14 +10,10 @@ import os
 
 
 
-DatasetsTypes= ["Moving_SmallMiddle","Middle","SmallMiddle", "Moving_Middle",  "RareTime", "Moving_RareTime", "RareFeature","Moving_RareFeature","PostionalTime", "PostionalFeature"]
-DataGenerationTypes=[None,"Harmonic", "GaussianProcess", "PseudoPeriodic", "AutoRegressive" ,"CAR","NARMA" ]
-
-models=["LSTM" ,"LSTMWithInputCellAttention","TCN","Transformer"]
 
 percentages=[ i for i in range(10,91,10)]
 
-def main(args):
+def main(args,DatasetsTypes,DataGenerationTypes,models):
 	if  os.path.exists(args.ignore_list):
 		f = open(args.ignore_list, 'r+')
 		ignore_list = [line for line in f.readlines()]
@@ -77,8 +69,6 @@ def main(args):
 				else:
 
 				
-
-					start=time.time()
 					for saliency in Saliency_Methods:
 						if(saliency!="Random"):
 							saliency_= np.load(args.Saliency_dir+modelName+"_"+models[m]+"_"+saliency+"_rescaled.npy")
@@ -100,33 +90,4 @@ def main(args):
 						for p,percentage in enumerate(percentages):
 							np.save(args.Mask_dir+modelName+"_"+models[m]+"_"+saliency+"_"+str(percentage)+"_percentSal_rescaled",indexGrid[:,:,p])
 
-					end=time.time()
-					print(modelName+"_"+models[m],"time",end-start)
-def parse_arguments(argv):
-
-	parser = argparse.ArgumentParser()
-	
-	parser.add_argument('--NumTimeSteps',type=int,default=50)
-	parser.add_argument('--NumFeatures',type=int,default=50)
-	parser.add_argument('--Saliency_dir', type=str, default='../Results/Saliency_Values/')
-
-	parser.add_argument('--Mask_dir', type=str, default='../Results/Saliency_Masks/')
-	parser.add_argument('--ignore_list', type=str, default='ignore_list.txt')
-
-
-	parser.add_argument('--GradFlag', type=bool, default=True)
-	parser.add_argument('--IGFlag', type=bool, default=True)
-	parser.add_argument('--DLFlag', type=bool, default=True)
-	parser.add_argument('--GSFlag', type=bool, default=True)
-	parser.add_argument('--DLSFlag', type=bool, default=True)
-	parser.add_argument('--SGFlag', type=bool, default=True)
-	parser.add_argument('--ShapleySamplingFlag', type=bool, default=True)
-	parser.add_argument('--FeaturePermutationFlag', type=bool, default=True)
-	parser.add_argument('--FeatureAblationFlag', type=bool, default=True)
-	parser.add_argument('--OcclusionFlag', type=bool, default=True)
-
-
-	return  parser.parse_args()
-
-if __name__ == '__main__':
-	main(parse_arguments(sys.argv[1:]))
+					print("Creating Masks for ",modelName+"_"+models[m])

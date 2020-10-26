@@ -82,8 +82,6 @@ def createDataset(args,NumberOFsamples):
 
 
 	for i in range (NumberOFsamples):
-		if(i%10==0):
-			print(i)
 		if(Targets[i]==0):
 			Targets[i]=1
 
@@ -197,7 +195,7 @@ def createPositionalDataset(args,NumberOFsamples):
 
 
 
-def main(args):
+def createSimulationDataProcesses(args):
 
 
 
@@ -232,27 +230,25 @@ def main(args):
 			for i in range(TrainingDataset_MetaData.shape[0]):
 				if(TrainingDataset_MetaData[i,0]==1 and  len(posIndex)<2):
 					posIndex.append(i)
-					# print("pos",i , TrainingDataset_MetaData[i,:])
 				elif(TrainingDataset_MetaData[i,0]==0 and  len(negIndex)<2):
 					negIndex.append(i)
-					# print("neg",i , TrainingDataset_MetaData[i,:])
 
 				if(len(negIndex)==2 and len(posIndex)==2):
 					break
 
 			if(args.DataGenerationProcess==None):
-				plotExampleBox(TrainingDataset[negIndex[0],:,:],args.Graph_dir+args.DataName+'_negtive1' ,flip=True)
-				plotExampleBox(TrainingDataset[posIndex[0],:,:],args.Graph_dir+args.DataName+'_postive1' ,flip=True)
+				plotExampleBox(TrainingDataset[negIndex[0],:,:],args.datasets_graphs_dir+args.DataName+'_negtive1' ,flip=True)
+				plotExampleBox(TrainingDataset[posIndex[0],:,:],args.datasets_graphs_dir+args.DataName+'_postive1' ,flip=True)
 				
-				plotExampleBox(TrainingDataset[negIndex[1],:,:],args.Graph_dir+args.DataName+'_negtive2' ,flip=True)
-				plotExampleBox(TrainingDataset[posIndex[1],:,:],args.Graph_dir+args.DataName+'_postive2' ,flip=True)
+				plotExampleBox(TrainingDataset[negIndex[1],:,:],args.datasets_graphs_dir+args.DataName+'_negtive2' ,flip=True)
+				plotExampleBox(TrainingDataset[posIndex[1],:,:],args.datasets_graphs_dir+args.DataName+'_postive2' ,flip=True)
 
 
 			else:
-				plotExampleProcesses(TrainingDataset[negIndex[0],:,:],args.Graph_dir+args.DataName+'_negtive1')
-				plotExampleProcesses(TrainingDataset[posIndex[0],:,:],args.Graph_dir+args.DataName+'_postive1',color='b')
-				plotExampleProcesses(TrainingDataset[negIndex[1],:,:],args.Graph_dir+args.DataName+'_negtive2')
-				plotExampleProcesses(TrainingDataset[posIndex[1],:,:],args.Graph_dir+args.DataName+'_postive2',color='b')
+				plotExampleProcesses(TrainingDataset[negIndex[0],:,:],args.datasets_graphs_dir+args.DataName+'_negtive1')
+				plotExampleProcesses(TrainingDataset[posIndex[0],:,:],args.datasets_graphs_dir+args.DataName+'_postive1',color='b')
+				plotExampleProcesses(TrainingDataset[negIndex[1],:,:],args.datasets_graphs_dir+args.DataName+'_negtive2')
+				plotExampleProcesses(TrainingDataset[posIndex[1],:,:],args.datasets_graphs_dir+args.DataName+'_postive2',color='b')
 
 		else:
 			
@@ -272,11 +268,11 @@ def main(args):
 					break
 
 
-			plotExampleBox(TrainingDataset[negIndex,:,:],args.Graph_dir+args.DataName+'_negtive_heatmap',flip=True)
-			plotExampleBox(TrainingDataset[posIndex,:,:],args.Graph_dir+args.DataName+'_postive_heatmap',flip=True)
+			plotExampleBox(TrainingDataset[negIndex,:,:],args.datasets_graphs_dir+args.DataName+'_negtive_heatmap',flip=True)
+			plotExampleBox(TrainingDataset[posIndex,:,:],args.datasets_graphs_dir+args.DataName+'_postive_heatmap',flip=True)
 
-			plotExampleProcesses(TrainingDataset[negIndex,:,:],args.Graph_dir+args.DataName+'_negtive_signal')
-			plotExampleProcesses(TrainingDataset[posIndex,:,:],args.Graph_dir+args.DataName+'_postive_signal',color='b')
+			plotExampleProcesses(TrainingDataset[negIndex,:,:],args.datasets_graphs_dir+args.DataName+'_negtive_signal')
+			plotExampleProcesses(TrainingDataset[posIndex,:,:],args.datasets_graphs_dir+args.DataName+'_postive_signal',color='b')
 
 	if(args.save==True):
 		print("Saving Datasets...")
@@ -285,62 +281,3 @@ def main(args):
 
 		np.save(args.data_dir+"SimulatedTestingData_"+args.DataName+"_F_"+str(args.NumFeatures)+"_TS_"+str(args.NumTimeSteps),TestingDataset)
 		np.save(args.data_dir+"SimulatedTestingMetaData_"+args.DataName+"_F_"+str(args.NumFeatures)+"_TS_"+str(args.NumTimeSteps),TestingDataset_MetaData)
-
-
-
-
-# def parse_arguments(argv):
-# 	parser = argparse.ArgumentParser()
-
-# 	parser.add_argument('--DataName', type=str, default="MiddleBox")
-# 	parser.add_argument('--DataGenerationProcess', type=str, default=None)
-
-
-# 	parser.add_argument('--plot', type=bool, default=True)
-# 	parser.add_argument('--save', type=bool, default=False)
-
-# 	parser.add_argument('--isMoving', type=bool, default=False)
-# 	parser.add_argument('--isPositional', type=bool, default=False)
-
-
-# 	parser.add_argument('--Sampler', type=str, default="regular")
-# 	parser.add_argument('--hasNoise', type=bool, default=True)
-# 	parser.add_argument('--Kernal', type=str, default="Matern")
-# 	parser.add_argument('--Frequency',type=float,default=2.0)
-# 	parser.add_argument('--ar_param',type=float,default=0.9)
-# 	parser.add_argument('--Order',type=int,default=10)
-
-
-# 	parser.add_argument('--NumTrainingSamples',type=int,default=1000)
-# 	parser.add_argument('--NumTestingSamples',type=int,default=300)
-
-
-# 	parser.add_argument('--NumTimeSteps',type=int,default=100)
-# 	parser.add_argument('--NumFeatures',type=int,default=100)
-
-
-# 	parser.add_argument('--ImpTimeSteps',type=int,default=40)
-# 	parser.add_argument('--ImpFeatures',type=int,default=40)
-
-# 	parser.add_argument('--StartImpTimeSteps',type=int,default=30)
-# 	parser.add_argument('--StartImpFeatures',type=int,default=30)
-
-
-
-# 	parser.add_argument('--FreezeType', type=str, default="Feature")
-# 	parser.add_argument('--Loc1',type=int,default=0)
-# 	parser.add_argument('--Loc2',type=int,default=100)
-
-
-
-# 	parser.add_argument('--Graph_dir', type=str, default='../Graphs/')
-# 	parser.add_argument('--data_dir', type=str, default="../Datasets/")
-
-
-
-
-
-# 	return  parser.parse_args()
-
-# if __name__ == '__main__':
-# 	main(parse_arguments(sys.argv[1:]))

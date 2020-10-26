@@ -14,18 +14,9 @@ import pandas as pd
 
 
 
-
-DatasetsTypes= ["Moving_SmallMiddle","Middle","SmallMiddle", "Moving_Middle", "RareTime" "Moving_RareTime", "RareFeature","Moving_RareFeature","PostionalTime", "PostionalFeature"]
-DataGenerationTypes=[None,"Harmonic", "GaussianProcess", "PseudoPeriodic", "AutoRegressive" ,"CAR","NARMA" ]
-
-models=["LSTM" ,"LSTMWithInputCellAttention","TCN","Transformer"]
-
-
-
-
 maskedPercentages=[ i for i in range(0,101,10)]
 
-def main(args):
+def main(args,DatasetsTypes,DataGenerationTypes,models):
 
     if  os.path.exists(args.ignore_list):
         f = open(args.ignore_list, 'r+')
@@ -37,7 +28,6 @@ def main(args):
     else:
         ignore_list=[]
 
-    print(ignore_list)
 
 
     cols=["Saliency_Methods"]
@@ -275,60 +265,5 @@ def main(args):
             print()
 
             np.load = np_load_old
-
-
-
-
-  
-
-
-
-
-def parse_arguments(argv):
-
-    parser = argparse.ArgumentParser()
-    
-    parser.add_argument('--NumTimeSteps',type=int,default=50)
-    parser.add_argument('--NumFeatures',type=int,default=50)
-    parser.add_argument('--DataGenerationProcess', type=str, default=None)
-    parser.add_argument('--data_dir', type=str, default="../Datasets/")
-    parser.add_argument('--Mask_dir', type=str, default='../Results/Saliency_Masks/')
-    parser.add_argument('--Masked_Acc_dir', type=str, default= "../Results/Masked_Accuracy/")
-    parser.add_argument('--Saliency_dir', type=str, default='../Results/Saliency_Values/')
-    parser.add_argument('--ignore_list', type=str, default='ignore_list.txt')
-
-    parser.add_argument('--Precision_Recall_dir', type=str, default='../Results/Precision_Recall/')
-
-    parser.add_argument('--Sampler', type=str, default="irregular")
-    parser.add_argument('--hasNoise', type=bool, default=True)
-    parser.add_argument('--Kernal', type=str, default="Matern")
-    parser.add_argument('--Frequency',type=float,default=2.0)
-    parser.add_argument('--ar_param',type=float,default=0.9)
-    parser.add_argument('--Order',type=int,default=10)
-
-
-    parser.add_argument('--batch_size', type=int,default=10)
-
-    parser.add_argument('--GradFlag', type=bool, default=True)
-    parser.add_argument('--IGFlag', type=bool, default=True)
-    parser.add_argument('--DLFlag', type=bool, default=True)
-    parser.add_argument('--GSFlag', type=bool, default=True)
-    parser.add_argument('--DLSFlag', type=bool, default=True)
-    parser.add_argument('--SGFlag', type=bool, default=True)
-    parser.add_argument('--ShapleySamplingFlag', type=bool, default=True)
-    parser.add_argument('--FeaturePermutationFlag', type=bool, default=True)
-    parser.add_argument('--FeatureAblationFlag', type=bool, default=True)
-    parser.add_argument('--OcclusionFlag', type=bool, default=True)
-
-    parser.add_argument('--plot', type=bool, default=True)
-
-    parser.add_argument('--Graph_dir', type=str, default='../Graphs/')
-
-
-
-    return  parser.parse_args()
-
-if __name__ == '__main__':
-    main(parse_arguments(sys.argv[1:]))
 
 

@@ -1,9 +1,6 @@
 import sys
 import torch
-import torch.nn as nn
 from torch.autograd import Variable
-import argparse
-import Helper
 import torch.utils.data as data_utils
 import numpy as np
 from sklearn.preprocessing import StandardScaler,MinMaxScaler
@@ -13,25 +10,14 @@ from LSTM import LSTM
 from Transformer import Transformer
 from LSTMWithInputCellAttention import LSTMWithInputCellAttention
 from TCN import TCN
+import torch.nn as nn
 
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-batch_first =True
-
-DatasetsTypes= ["Middle", "SmallMiddle", "Moving_Middle", "Moving_SmallMiddle", "RareTime", "Moving_RareTime", "RareFeature","Moving_RareFeature","PostionalTime", "PostionalFeature"]
-DataGenerationTypes=[None,"Harmonic", "GaussianProcess", "PseudoPeriodic", "AutoRegressive" ,"CAR","NARMA" ]
-
-DatasetsTypes= ["Moving_SmallMiddle","Moving_RareTime","Moving_RareFeature"]
-DataGenerationTypes=["AutoRegressive", "GaussianProcess"]
-models=["LSTM","LSTMWithInputCellAttention","TCN","Transformer"]
-# SmallMiddle_Harmonic
-# DatasetsTypes= ["Middle"]#, "SmallMiddle", "Moving_Middle", "Moving_SmallMiddle", "RareTime", "Moving_RareTime", "RareFeature","Moving_RareFeature","PostionalTime", "PostionalFeature"]
-# DataGenerationTypes=[None]#,"Harmonic", "GaussianProcess", "PseudoPeriodic", "AutoRegressive" ,"CAR","NARMA" ]
-# Moving_SmallMiddle_AutoRegressive
-models=["Transformer"]#,"LSTMWithInputCellAttention","TCN","Transformer"]
 
 
-def main(args):
+
+
+def main(args,DatasetsTypes,DataGenerationTypes,models,device):
 	criterion = nn.CrossEntropyLoss()
 	for m in range(len(models)):
 
@@ -53,7 +39,6 @@ def main(args):
 
 				Training = Training.reshape(Training.shape[0],Training.shape[1]*Training.shape[2])
 				Testing = Testing.reshape(Testing.shape[0],Testing.shape[1]*Testing.shape[2])
-				print(Training.shape)
 
 				scaler = MinMaxScaler()
 				scaler.fit(Training)
@@ -134,8 +119,12 @@ def main(args):
 								torch.save(net, saveModelBestName)
 								noImprovementflag=False
 
-						print ('{} {}-->Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}, Train Accuracy {:.2f}, Test Accuracy {:.2f},BestEpochs {},BestAcc {:.2f} patience {}' 
-						   .format(args.DataName, models[m] ,epoch+1, args.num_epochs, i+1, total_step, loss.item(),Train_Acc, Test_Acc,BestEpochs , BestAcc , patience))
+							print ('{} {}-->Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}, Train Accuracy {:.2f}, Test Accuracy {:.2f},BestEpochs {},BestAcc {:.2f} patience {}' 
+							   .format(args.DataName, models[m] ,epoch+1, args.num_epochs, i+1, total_step, loss.item(),Train_Acc, Test_Acc,BestEpochs , BestAcc , patience))
+						if(Train_Acc>=99 or BestAcc>=99 ):
+							torch.save(net,saveModelLastName)
+							Train_acc_flag=True
+							break
 
 					if(noImprovementflag):
 						patience-=1
@@ -144,45 +133,9 @@ def main(args):
 
 					if(epoch+1)%10==0:
 						torch.save(net, saveModelLastName)
-					if(Train_Acc>=99 or BestAcc>=99 ):
-						torch.save(net,saveModelLastName)
-						Train_acc_flag=True
-						break
+
 					if(Train_acc_flag or patience==0):
 						break
 
 					Train_Acc =checkAccuracy(train_loaderRNN , net, args)
 					print('{} {} BestEpochs {},BestAcc {:.4f}, LastTrainAcc {:.4f},'.format(args.DataName, models[m] ,BestEpochs , BestAcc , Train_Acc))
-
-
-
-def parse_arguments(argv):
-
-	parser = argparse.ArgumentParser()
-	parser.add_argument('--num_classes', type=int, default=2)
-	parser.add_argument('--data_dir', type=str, default="../Datasets/")
-
-
-	parser.add_argument('--NumTimeSteps',type=int,default=50)
-	parser.add_argument('--NumFeatures',type=int,default=50)
-	parser.add_argument('--d_a', type=int, default=50)
-	parser.add_argument('--attention_hops', type=int, default=10)
-
-	parser.add_argument('--n_layers', type=int, default=6)
-	parser.add_argument('--heads', type=int, default=5)
-
-
-	parser.add_argument('--kernel_size', type=int, default=4)
-	parser.add_argument('--levels', type=int,default=3)
-
-
-	parser.add_argument('--hidden_size', type=int,default=5)
-	parser.add_argument('--batch_size', type=int,default=50)
-	parser.add_argument('--num_epochs', type=int,default=500)
-	parser.add_argument('--learning_rate', type=float,default=0.001)
-	parser.add_argument('--rnndropout', type=float,default=0.1)
-	parser.add_argument('--data-dir', help='Data  directory', action='store', type=str ,default="../Datasets/")
-	return  parser.parse_args()
-
-if __name__ == '__main__':
-    main(parse_arguments(sys.argv[1:]))
