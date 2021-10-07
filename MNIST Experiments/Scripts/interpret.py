@@ -49,27 +49,27 @@ def getTwoStepRescaling(Grad,input, sequence_length,input_size, TestingLabel,has
             ActualGrad = Grad.attribute(input,baselines=hasBaseline, target=TestingLabel).data.cpu().numpy()
 
 
+#     for t in range(sequence_length):
+#         timeGrad[:,t] = np.mean(np.absolute(ActualGrad[0,:,t]))
+
+
     for t in range(sequence_length):
-        timeGrad[:,t] = np.mean(np.absolute(ActualGrad[0,:,t]))
+        newInput = input.clone()
+        newInput[:,:,t]=assignment
+
+        if(hasBaseline==None):  
+            timeGrad_perTime = Grad.attribute(newInput,target=TestingLabel).data.cpu().numpy()
+        else:
+            if(hasFeatureMask!=None):
+                timeGrad_perTime = Grad.attribute(newInput,baselines=hasBaseline, target=TestingLabel,feature_mask=hasFeatureMask).data.cpu().numpy()    
+            elif(hasSliding_window_shapes!=None):
+                timeGrad_perTime = Grad.attribute(newInput,sliding_window_shapes=hasSliding_window_shapes, baselines=hasBaseline, target=TestingLabel).data.cpu().numpy()
+            else:
+                timeGrad_perTime = Grad.attribute(newInput,baselines=hasBaseline, target=TestingLabel).data.cpu().numpy()
 
 
-    # for t in range(sequence_length):
-    #     newInput = input.clone()
-    #     newInput[:,:,t]=assignment
-
-    #     if(hasBaseline==None):  
-    #         timeGrad_perTime = Grad.attribute(newInput,target=TestingLabel).data.cpu().numpy()
-    #     else:
-    #         if(hasFeatureMask!=None):
-    #             timeGrad_perTime = Grad.attribute(newInput,baselines=hasBaseline, target=TestingLabel,feature_mask=hasFeatureMask).data.cpu().numpy()    
-    #         elif(hasSliding_window_shapes!=None):
-    #             timeGrad_perTime = Grad.attribute(newInput,sliding_window_shapes=hasSliding_window_shapes, baselines=hasBaseline, target=TestingLabel).data.cpu().numpy()
-    #         else:
-    #             timeGrad_perTime = Grad.attribute(newInput,baselines=hasBaseline, target=TestingLabel).data.cpu().numpy()
-
-
-    #     timeGrad_perTime= np.absolute(ActualGrad - timeGrad_perTime)
-    #     timeGrad[:,t] = np.sum(timeGrad_perTime)
+        timeGrad_perTime= np.absolute(ActualGrad - timeGrad_perTime)
+        timeGrad[:,t] = np.sum(timeGrad_perTime)
 
 
 
